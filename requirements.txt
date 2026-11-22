@@ -5,8 +5,8 @@
 fastapi==0.128.0
 uvicorn==0.44.0
 pydantic==2.12.5
-pydantic-settings==2.13.1
-cryptography==44.0.3
+pydantic-settings==2.14.2
+cryptography==50.0.0
 httpx==0.28.1
 
 # Database driver - pick ONE that matches your server:
