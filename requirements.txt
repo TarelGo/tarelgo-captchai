@@ -1,0 +1,20 @@
+# TarelGo CaptchAI - pinned dependencies (Ubuntu 24.04, Python 3.12).
+# Versions match the verified test run by TarelGo Development (https://tarelgo.com).
+# Update ONLY after pip-audit and a full pytest run.
+
+fastapi==0.128.0
+uvicorn==0.44.0
+pydantic==2.12.5
+pydantic-settings==2.13.1
+cryptography==44.0.3
+httpx==0.28.1
+
+# Database driver - pick ONE that matches your server:
+# asyncpg==0.32.0     # PostgreSQL
+# aiomysql==0.2.1     # MariaDB / MySQL
+
+# --- dev dependencies (installed separately: pip install -r requirements-dev.txt) ---
+# pytest==9.0.2
+# pytest-asyncio==1.3.0
+# ruff==0.17.6
+# pip-audit

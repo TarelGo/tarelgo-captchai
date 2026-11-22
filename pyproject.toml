@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tarelgo-captchai"
+version = "1.0.0"
+description = "TarelGo CaptchAI - cryptographic AI-vs-human traffic fork with RFC 9421 Web Bot Auth and one-shot capability tokens. Built by TarelGo Development (https://tarelgo.com)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "TarelGo Development" }]
+keywords = ["ai", "bot-detection", "web-bot-auth", "rfc9421", "captcha", "tarelgo",
+            "anti-bot", "ai-crawlers", "traffic-fork", "http-message-signatures"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Security",
+    "Topic :: System :: Networking :: Firewalls",
+]
+
+# Core runtime dependencies are intentionally minimal: a plain VPS with
+# Python 3.11+ is enough. Database drivers are optional extras so that the
+# service can run against PostgreSQL, MariaDB, or in-memory (dev) setups.
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+    "pydantic>=2.7,<3",
+    "pydantic-settings>=2.3,<3",
+    "cryptography>=42,<46",
+    "httpx>=0.27,<1",
+]
+
+[project.optional-dependencies]
+postgres = ["asyncpg>=0.29,<1"]
+mariadb = ["aiomysql>=0.2,<1"]
+dev = [
+    "pytest>=8,<10",
+    "pytest-asyncio>=0.23,<2",
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "pip-audit>=2.7",
+]
+
+[project.scripts]
+tarelgo-captchai = "tarelgo_captchai.__main__:tarelgo_main"
+
+[project.urls]
+Homepage = "https://tarelgo.com"
+Repository = "https://github.com/TarelGo/tarelgo-captchai"
+Issues = "https://github.com/TarelGo/tarelgo-captchai/issues"
+Changelog = "https://github.com/TarelGo/tarelgo-captchai/releases"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+tarelgo_captchai = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "S", "ASYNC"]
+ignore = ["S104"]  # binding to 127.0.0.1 is safe by design (loopback only)
+
+[tool.ruff.lint.per-file-ignores]
+# Tests: fixed secrets, plain asserts and hardcoded tokens are expected there.
+"tests/*" = ["S101", "S105", "S106"]
+"examples/*" = ["S106"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-m 'not perf'"
+markers = [
+    "perf: load checks (run manually with: pytest -m perf)",
+]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+check_untyped_defs = true

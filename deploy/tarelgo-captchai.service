@@ -1,0 +1,66 @@
+# TarelGo CaptchAI - hardened systemd unit.
+#
+# Install:
+#   cp deploy/tarelgo-captchai.service /etc/systemd/system/
+#   systemctl daemon-reload && systemctl enable --now tarelgo-captchai
+#
+# The service listens on 127.0.0.1:8008 (behind nginx/Apache). For the direct
+# no-proxy variant override the bind address:
+#   systemctl edit tarelgo-captchai
+#     [Service]
+#     Environment=TARELGO_CAPTCHAI_BIND_HOST=0.0.0.0
+#
+# Hardening summary: dedicated non-root user, no privileges, read-only
+# filesystem except /opt/tarelgo-captchai/var, no kernel manipulation,
+# native syscalls only. Equivalent of container isolation without Docker.
+
+[Unit]
+Description=TarelGo CaptchAI - AI/human traffic fork (TarelGo Development, https://tarelgo.com)
+Documentation=https://tarelgo.com
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tarelgo-captchai
+Group=tarelgo-captchai
+WorkingDirectory=/opt/tarelgo-captchai
+EnvironmentFile=/opt/tarelgo-captchai/.env
+ExecStart=/opt/tarelgo-captchai/.venv/bin/python -m tarelgo_captchai
+Restart=always
+RestartSec=3
+TimeoutStopSec=10
+
+# --- sandboxing -----------------------------------------------------------
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/tarelgo-captchai/var
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0077
+LimitNOFILE=16384
+
+# --- logging (journald; JSON lines from the app itself) --------------------
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tarelgo-captchai
+
+[Install]
+WantedBy=multi-user.target

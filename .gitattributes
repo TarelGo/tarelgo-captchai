@@ -1,0 +1,11 @@
+# Normalize line endings: bash scripts and configs must always stay LF,
+# otherwise deploy/install.sh breaks on Windows checkouts.
+* text=auto eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.conf text eol=lf
+*.service text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
