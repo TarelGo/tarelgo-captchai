@@ -16,7 +16,7 @@ and even the headers still gets a byte-identical `404` on the AI branch.
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)](CONTRIBUTING.md)
 
 [🌐 Website](https://tarelgo.com) ·
-[🎬 Live Demo](https://tarelgo.com#captchai-demo) ·
+[🎬 Live Demo](https://tarelgo.com/captcha-ai.html) ·
 [📖 llms.txt](https://tarelgo.com/llms.txt) ·
 [🐞 Report Bug](https://github.com/TarelGo/tarelgo-captchai/issues) ·
 [💡 Request Feature](https://github.com/TarelGo/tarelgo-captchai/issues)
