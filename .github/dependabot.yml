@@ -1,0 +1,43 @@
+# Dependabot: automated dependency updates for TarelGo CaptchAI.
+# Docs: https://docs.github.com/code-security/dependabot
+#
+# Result: instead of random one-off bumps, the maintainer gets ONE grouped
+# PR per week per ecosystem, with CI (72 tests + ruff on 3 Python versions)
+# already green. Merge when checks are green; majors stay separate.
+
+version: 2
+
+updates:
+  # --- Python dependencies (pyproject.toml + requirements.txt) -------------
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Moscow"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "TarelGo"
+    groups:
+      pip-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "deps"
+
+  # --- GitHub Actions used by CI (actions/checkout, actions/setup-python) --
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Moscow"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "TarelGo"
+    commit-message:
+      prefix: "ci"
